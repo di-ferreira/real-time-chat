@@ -1,18 +1,17 @@
 {
   "compilerOptions": {
     "target": "es2016",
-    "lib": [
-      "es2019"
-    ],
-    /* Modules */
     "module": "commonjs",
-    "rootDir": "src",
-    "outDir": "./bin",
+    "rootDir": "./src",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "outDir": "./dist/",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    /* Type Checking */
     "strict": true,
-    "noImplicitAny": true,
     "skipLibCheck": true
+  },
+  "ts-node": {
+    "transpileOnly": true
   }
 }
