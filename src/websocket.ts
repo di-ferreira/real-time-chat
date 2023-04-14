@@ -18,36 +18,39 @@ const users: RoomUser[] = [];
 const messages: Message[] = [];
 
 io.on('connection', (socket) => {
-  socket.on('select_room', (data, callback) => {
+  socket.on('select_room', (data) => {
     socket.join(data.room);
 
     const userInRoom = users.find(
-      (user) => user.username === data.userName && user.room === data.room
+      (user) => user.username === data.username && user.room === data.room
     );
 
     userInRoom
       ? (userInRoom.socket_id = socket.id)
       : users.push({
           room: data.room,
-          username: data.userName,
+          username: data.username,
           socket_id: socket.id,
         });
 
+    console.log(`Usuário ${data.username} se conectou na sala ${data.room}`);
     const messagesRoom = getMessagesRoom(data.room);
-    callback(messagesRoom);
+    socket.emit('messages_room', messagesRoom);
   });
 
   socket.on('message', (data) => {
     const message: Message = {
       room: data.room,
-      text: data.message,
-      username: data.userName,
+      text: data.text,
+      username: data.username,
       created_at: new Date(),
     };
-
+    console.log(
+      `Usuário ${message.username} enviou a menssagem ${message.text}`
+    );
     messages.push(message);
 
-    io.to(data.room).emit('message', message);
+    io.to(data.room).emit('message', messages);
   });
 });
 
